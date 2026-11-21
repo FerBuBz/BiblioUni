@@ -23,6 +23,12 @@ public class PrestamoService {
             throw new IllegalArgumentException("El material no está disponible");
         }
 
+        if (fechaPrestamo == null || fechaDevolucion == null
+        || fechaDevolucion.isBefore(fechaPrestamo)) {
+        throw new IllegalArgumentException(
+            "La fecha de devolución no puede ser anterior al préstamo");
+}
+        
         Prestamo prestamo = new Prestamo(
                 id, material, fechaPrestamo, fechaDevolucion);
 
@@ -34,6 +40,8 @@ public class PrestamoService {
         if (prestamo == null || fechaEntregaReal == null) {
             throw new IllegalArgumentException("Los datos son obligatorios");
         }
+
+        
 
         long diasRetraso = java.time.temporal.ChronoUnit.DAYS.between(
                 prestamo.getFechaDevolucion(), fechaEntregaReal);
