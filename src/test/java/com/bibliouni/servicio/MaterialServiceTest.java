@@ -113,4 +113,10 @@ void debeLanzarErrorCuandoNombreEsNulo() {
         // Assert
         assertFalse(resultado.isPresent());
     }
+
+    @Test
+    void debeRechazarMaterialCuandoIdEsNulo() {
+    assertThrows(IllegalArgumentException.class, () ->
+            materialService.crearMaterial(null, "Libro de Java", true));
+}
 }
