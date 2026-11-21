@@ -11,35 +11,38 @@
 
 ## 2. Alcance de las pruebas
 
-El objetivo de este plan es verificar el correcto funcionamiento del sistema BiblioUni, especialmente en los procesos relacionados con la gestión de materiales, usuarios, préstamos, devoluciones y multas.
+El objetivo de este plan es verificar el correcto funcionamiento de las principales operaciones del sistema BiblioUni, enfocándose en la gestión de materiales, el registro de préstamos y el cálculo de multas.
 
 **Funcionalidades que se probarán:**
 
-- Registro y consulta de materiales.
-- Registro y validación de usuarios.
-- Registro de préstamos de libros.
-- Control del límite máximo de tres préstamos activos por estudiante.
-- Validación de disponibilidad de materiales.
+- Creación y registro de materiales.
+- Validación de los datos obligatorios de los materiales.
+- Búsqueda de materiales por su identificador.
+- Consulta de materiales existentes e inexistentes.
+- Registro de préstamos de materiales disponibles.
+- Validación de la disponibilidad de los materiales.
+- Validación de las fechas de préstamo y devolución.
 - Cálculo de multas por devoluciones tardías.
-- Actualización del inventario.
-- Validación de operaciones no permitidas.
+- Manejo de datos inválidos y situaciones no permitidas.
 
 **Funcionalidades que no se probarán en esta etapa:**
 
-- Pruebas de carga masiva y estrés extremo.
-- Auditorías avanzadas de seguridad.
-- Pruebas de penetración externas.
-- Evaluación de infraestructura en producción.
+- Registro y administración de usuarios.
+- Control de un límite de préstamos por estudiante.
+- Gestión de inventario mediante cantidades.
+- Control de permisos y autenticación.
+- Pruebas de integración con bases de datos externas.
+- Pruebas de API REST.
+- Pruebas de carga, rendimiento y seguridad avanzada.
 
 ## 3. Enfoque de pruebas
 
-Se utilizará una combinación de técnicas de prueba para verificar la calidad y el comportamiento del sistema.
+Se utilizarán diferentes técnicas para comprobar el comportamiento del sistema y detectar posibles errores.
 
-- **Pruebas unitarias:** se utilizará JUnit 5 y Mockito para comprobar individualmente los servicios MaterialService y PrestamoService, simulando la comunicación con los repositorios.
-- **Pruebas de integración:** se verificará la comunicación entre los servicios y la base de datos utilizando H2 como entorno de pruebas.
-- **Pruebas de API:** se utilizará Postman para validar las respuestas de los endpoints REST.
-- **Técnicas de diseño:** se aplicarán partición de equivalencia y análisis de valores límite para identificar posibles errores en los datos de entrada.
-- **Desarrollo basado en pruebas (TDD):** se aplicará el ciclo Red-Green-Refactor en dos funcionalidades seleccionadas.
+- **Pruebas unitarias:** se utilizará JUnit 5 para verificar el funcionamiento de los métodos de los servicios y repositorios. También se empleará Mockito para simular las dependencias de los servicios.
+- **Pruebas de validación:** se comprobará que el sistema acepte los datos correctos y rechace los datos incompletos o inválidos.
+- **Técnicas de diseño:** se aplicarán partición de equivalencia, análisis de valores límite y caminos tristes para evaluar diferentes situaciones de funcionamiento.
+- **Desarrollo basado en pruebas (TDD):** se aplicará el ciclo Red-Green-Refactor en dos funcionalidades seleccionadas, registrando cada etapa mediante commits en Git.
 
 ## 4. Criterios de entrada
 
@@ -49,35 +52,34 @@ Para iniciar la ejecución de las pruebas se deben cumplir las siguientes condic
 - Contar con las dependencias de JUnit 5 y Mockito.
 - Disponer de las clases y métodos que serán evaluados.
 - Verificar que el proyecto compile correctamente.
-- Tener configurado el entorno de pruebas con H2 cuando se ejecuten pruebas de integración.
-- Contar con los escenarios y casos de prueba documentados.
-- Verificar que los endpoints estén disponibles cuando se realicen pruebas de API.
+- Tener documentados los escenarios y casos de prueba.
+- Contar con los archivos de pruebas dentro de la estructura correspondiente del proyecto.
+- Tener configurado Git para registrar los cambios realizados.
 
 ## 5. Criterios de salida
 
 Se considerará finalizada esta etapa de pruebas cuando se cumplan las siguientes condiciones:
 
 - Tener documentados al menos 15 casos de prueba.
-- Haber ejecutado el 100 % de los casos de prueba diseñados.
-- Obtener al menos un 60 % de cobertura de código mediante JaCoCo.
-- No presentar defectos críticos pendientes.
-- Tener implementadas y aprobadas al menos 6 pruebas unitarias con JUnit 5 y Mockito.
-- Evidenciar dos ciclos completos de TDD mediante commits.
+- Ejecutar las pruebas unitarias diseñadas.
+- Obtener resultados satisfactorios en las pruebas implementadas.
+- No presentar fallos pendientes en las pruebas automatizadas.
+- Contar con al menos 6 pruebas unitarias utilizando JUnit 5 y Mockito.
+- Evidenciar dos ciclos completos de TDD mediante commits en Git.
 - Ejecutar correctamente el comando `mvn test`.
+- Conservar las evidencias de ejecución y los cambios realizados en el repositorio.
 
 ## 6. Recursos necesarios
 
 **Herramientas de software:**
 
-- Java: lenguaje de programación.
-- Maven: administración y ejecución del proyecto.
-- JUnit 5: ejecución de pruebas unitarias.
-- Mockito: simulación de dependencias.
-- Postman: validación de servicios API.
-- JaCoCo: medición de cobertura de código.
-- H2: base de datos para pruebas.
-- Git y GitHub: control de versiones y seguimiento de cambios.
-- Visual Studio Code: entorno de desarrollo.
+- **Java:** lenguaje utilizado para desarrollar el proyecto.
+- **Maven:** herramienta para administrar el proyecto y ejecutar las pruebas.
+- **JUnit 5:** herramienta para crear y ejecutar pruebas unitarias.
+- **Mockito:** herramienta para simular dependencias durante las pruebas.
+- **Git:** sistema para controlar las versiones y registrar los cambios.
+- **GitHub:** plataforma para almacenar y compartir el proyecto.
+- **Visual Studio Code:** entorno utilizado para desarrollar y ejecutar el proyecto.
 
 **Recursos humanos:**
 
@@ -87,14 +89,16 @@ Se considerará finalizada esta etapa de pruebas cuando se cumplan las siguiente
 
 | Riesgo identificado | Impacto | Acción preventiva o contingencia |
 |---|---|---|
-| Errores en la lógica de préstamos | Alto | Diseñar pruebas para validar disponibilidad y límites de préstamos. |
-| Registro de préstamos con materiales no disponibles | Alto | Implementar validaciones antes de aprobar cada préstamo. |
-| Fallos en las pruebas unitarias | Medio | Revisar las dependencias y utilizar Mockito para aislar los servicios. |
-| Problemas de conexión con la base de datos H2 | Medio | Verificar la configuración y realizar pruebas de conexión. |
-| Cobertura de código inferior al 60 % | Medio | Ampliar los casos de prueba y utilizar JaCoCo para identificar código sin evaluar. |
-| Pérdida de avances del proyecto | Alto | Realizar commits frecuentes y mantener los cambios sincronizados con GitHub. |
-| Errores durante la implementación de TDD | Medio | Respetar las fases Red-Green-Refactor y verificar cada ejecución. |
+| Errores en la lógica de préstamos | Alto | Diseñar pruebas para validar el registro y las condiciones del préstamo. |
+| Registro de materiales con datos inválidos | Medio | Implementar validaciones para los campos obligatorios. |
+| Préstamos de materiales no disponibles | Alto | Verificar la disponibilidad antes de registrar el préstamo. |
+| Errores en el cálculo de multas | Alto | Realizar pruebas con diferentes fechas de devolución. |
+| Fallos en las pruebas unitarias | Medio | Revisar los métodos y utilizar Mockito para aislar las dependencias. |
+| Pérdida de avances del proyecto | Alto | Realizar commits frecuentes y mantener los cambios registrados en Git. |
+| Errores durante la implementación de TDD | Medio | Respetar las fases Red-Green-Refactor y verificar los resultados de cada etapa. |
 
-**Conclusión del plan:**
+## 8. Conclusión del plan
 
-Este plan permitirá organizar las pruebas de BiblioUni y comprobar que sus funcionalidades principales respondan correctamente. Mediante las pruebas unitarias, de integración y API se busca identificar errores, mejorar la confiabilidad del sistema y garantizar que las reglas de negocio se cumplan antes de considerar finalizada esta etapa del proyecto.
+Este plan permite organizar las pruebas del sistema BiblioUni y comprobar que sus funcionalidades principales respondan correctamente. Mediante las pruebas unitarias y las diferentes técnicas de diseño se busca identificar errores, validar las reglas implementadas y mejorar la confiabilidad del sistema.
+
+Además, el uso de JUnit 5, Mockito y la metodología TDD permite desarrollar y verificar las funcionalidades de manera organizada, dejando evidencia de los cambios y de los resultados obtenidos durante el proceso.

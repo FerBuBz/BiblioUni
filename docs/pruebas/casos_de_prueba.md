@@ -2,199 +2,209 @@
 
 ## 1. Introducción
 
-En este documento se presentan los casos de prueba diseñados para verificar el funcionamiento del sistema BiblioUni. Se utilizan técnicas de partición de equivalencia y análisis de valores límite para comprobar el comportamiento del sistema tanto con datos válidos como inválidos.
+En este documento se presentan los casos de prueba diseñados para verificar el funcionamiento del sistema BiblioUni. Se utilizan técnicas de partición de equivalencia, análisis de valores límite y caminos tristes para comprobar el comportamiento del sistema con datos válidos e inválidos.
+
+Las pruebas se enfocan principalmente en la creación y consulta de materiales, el registro de préstamos y el cálculo de multas.
 
 ## 2. Casos de prueba
 
-### CP-001. Registrar material con datos válidos
+### CP-001. Crear material con datos válidos
 
-- **Funcionalidad:** Registrar material.
-- **Precondiciones:** El sistema está disponible y el material no se encuentra registrado.
-- **Datos de entrada:** Título: "Cálculo Diferencial", autor: "Carlos Pérez", cantidad: 5.
+- **Funcionalidad:** Crear material.
+- **Precondiciones:** El servicio de materiales está disponible.
+- **Datos de entrada:** ID = 1, nombre = "Libro de Java", disponible = true.
 - **Pasos:**
   1. Ingresar los datos del material.
-  2. Ejecutar el registro.
-  3. Consultar el resultado.
-- **Resultado esperado:** El material se registra correctamente y queda disponible en el catálogo.
+  2. Ejecutar el método de creación.
+  3. Verificar el resultado.
+- **Resultado esperado:** El sistema crea el material y lo guarda correctamente.
 - **Técnica aplicada:** Partición de equivalencia (clase válida).
 
-### CP-002. Registrar material sin título
+### CP-002. Crear material con identificador nulo
 
-- **Funcionalidad:** Registrar material.
-- **Precondiciones:** El sistema permite acceder al formulario o servicio de registro.
-- **Datos de entrada:** Título vacío, autor: "Carlos Pérez", cantidad: 5.
+- **Funcionalidad:** Validar identificador del material.
+- **Precondiciones:** El servicio de materiales está disponible.
+- **Datos de entrada:** ID = null, nombre = "Libro de Java", disponible = true.
 - **Pasos:**
-  1. Enviar los datos del material.
-  2. Ejecutar el registro.
+  1. Ingresar un material sin identificador.
+  2. Ejecutar el método de creación.
   3. Verificar la respuesta.
-- **Resultado esperado:** El sistema rechaza el registro porque el título es obligatorio.
+- **Resultado esperado:** El sistema rechaza la operación y genera una excepción indicando que el ID es obligatorio.
+- **Técnica aplicada:** Partición de equivalencia (clase inválida) y camino triste.
+
+### CP-003. Crear material con nombre nulo
+
+- **Funcionalidad:** Validar nombre del material.
+- **Precondiciones:** El servicio de materiales está disponible.
+- **Datos de entrada:** ID = 2, nombre = null, disponible = true.
+- **Pasos:**
+  1. Ingresar un material sin nombre.
+  2. Ejecutar el método de creación.
+  3. Verificar la respuesta.
+- **Resultado esperado:** El sistema rechaza la operación porque el nombre es obligatorio.
+- **Técnica aplicada:** Partición de equivalencia (clase inválida) y camino triste.
+
+### CP-004. Crear material con nombre vacío
+
+- **Funcionalidad:** Validar nombre del material.
+- **Precondiciones:** El servicio de materiales está disponible.
+- **Datos de entrada:** ID = 3, nombre = "", disponible = true.
+- **Pasos:**
+  1. Ingresar el nombre vacío.
+  2. Ejecutar el método de creación.
+  3. Verificar el resultado.
+- **Resultado esperado:** El sistema rechaza el registro mediante una excepción.
 - **Técnica aplicada:** Partición de equivalencia (clase inválida).
 
-### CP-003. Consultar material existente
+### CP-005. Crear material con nombre de un carácter
+
+- **Funcionalidad:** Crear material.
+- **Precondiciones:** El servicio de materiales está disponible.
+- **Datos de entrada:** ID = 4, nombre = "A", disponible = true.
+- **Pasos:**
+  1. Ingresar un nombre de un carácter.
+  2. Ejecutar el método de creación.
+  3. Verificar el resultado.
+- **Resultado esperado:** El sistema permite crear el material porque el nombre no está vacío.
+- **Técnica aplicada:** Valores límite (mínimo nombre válido).
+
+### CP-006. Consultar material existente
 
 - **Funcionalidad:** Buscar material por ID.
-- **Precondiciones:** Existe un material registrado con ID 10.
-- **Datos de entrada:** ID = 10.
+- **Precondiciones:** Existe un material registrado con ID = 1.
+- **Datos de entrada:** ID = 1.
 - **Pasos:**
   1. Solicitar la búsqueda del material.
   2. Consultar el resultado.
-- **Resultado esperado:** El sistema devuelve el material correspondiente al ID 10.
-- **Técnica aplicada:** Partición de equivalencia (identificador existente).
+  3. Verificar sus datos.
+- **Resultado esperado:** El sistema devuelve el material correspondiente al identificador solicitado.
+- **Técnica aplicada:** Partición de equivalencia (clase válida).
 
-### CP-004. Consultar material inexistente
+### CP-007. Consultar material inexistente
 
 - **Funcionalidad:** Buscar material por ID.
-- **Precondiciones:** No existe un material con ID 999.
+- **Precondiciones:** No existe un material con ID = 999.
 - **Datos de entrada:** ID = 999.
 - **Pasos:**
   1. Solicitar la búsqueda.
-  2. Verificar la respuesta del servicio.
-- **Resultado esperado:** El sistema devuelve un resultado vacío o una excepción controlada, sin generar errores inesperados.
-- **Técnica aplicada:** Partición de equivalencia (clase inválida) y camino triste.
+  2. Consultar el resultado.
+  3. Verificar la respuesta.
+- **Resultado esperado:** El sistema devuelve un resultado vacío mediante un Optional.
+- **Técnica aplicada:** Partición de equivalencia (clase inexistente) y camino triste.
 
-### CP-005. Registrar estudiante con datos válidos
-
-- **Funcionalidad:** Registrar usuario.
-- **Precondiciones:** El usuario no está registrado previamente.
-- **Datos de entrada:** Nombre: "Andrés Gómez", correo: "andres@universidad.edu", rol: "ESTUDIANTE".
-- **Pasos:**
-  1. Ingresar los datos del estudiante.
-  2. Ejecutar el registro.
-  3. Consultar el usuario creado.
-- **Resultado esperado:** El sistema registra correctamente al estudiante con el rol indicado.
-- **Técnica aplicada:** Partición de equivalencia (clase válida).
-
-### CP-006. Registrar préstamo con cero préstamos activos
+### CP-008. Registrar préstamo con material disponible
 
 - **Funcionalidad:** Registrar préstamo.
-- **Precondiciones:** El estudiante está activo, tiene cero préstamos activos y el libro está disponible.
-- **Datos de entrada:** Préstamos activos = 0, material disponible = 1.
+- **Precondiciones:** El material existe y está disponible.
+- **Datos de entrada:** ID préstamo = 1, material disponible = true, fecha préstamo = 21/11/2026, fecha devolución = 28/11/2026.
 - **Pasos:**
-  1. Seleccionar al estudiante.
-  2. Seleccionar el libro disponible.
-  3. Solicitar el préstamo.
-- **Resultado esperado:** El préstamo se registra correctamente y el estudiante pasa a tener un préstamo activo.
+  1. Seleccionar un material disponible.
+  2. Ingresar las fechas del préstamo.
+  3. Ejecutar el registro.
+  4. Verificar el resultado.
+- **Resultado esperado:** El sistema registra el préstamo correctamente.
 - **Técnica aplicada:** Partición de equivalencia (clase válida).
 
-### CP-007. Registrar préstamo con dos préstamos activos
+### CP-009. Registrar préstamo con material no disponible
 
-- **Funcionalidad:** Registrar préstamo.
-- **Precondiciones:** El estudiante está activo y tiene dos préstamos activos.
-- **Datos de entrada:** Préstamos activos = 2, material disponible = 1.
+- **Funcionalidad:** Validar disponibilidad del material.
+- **Precondiciones:** El material existe, pero no está disponible.
+- **Datos de entrada:** ID préstamo = 2, material disponible = false.
 - **Pasos:**
-  1. Seleccionar al estudiante.
-  2. Seleccionar un libro disponible.
-  3. Solicitar el préstamo.
-- **Resultado esperado:** El sistema permite el préstamo y el estudiante queda con tres préstamos activos.
-- **Técnica aplicada:** Partición de equivalencia (clase válida).
-
-### CP-008. Registrar el tercer préstamo permitido
-
-- **Funcionalidad:** Validar límite máximo de préstamos.
-- **Precondiciones:** El estudiante está activo y tiene dos préstamos activos.
-- **Datos de entrada:** Préstamos actuales = 2, nuevo préstamo = 1.
-- **Pasos:**
-  1. Seleccionar al estudiante.
-  2. Solicitar un nuevo préstamo.
-  3. Verificar la cantidad de préstamos activos.
-- **Resultado esperado:** El sistema permite registrar el tercer préstamo, alcanzando el límite establecido.
-- **Técnica aplicada:** Valores límite (límite máximo permitido).
-
-### CP-009. Intentar registrar un cuarto préstamo
-
-- **Funcionalidad:** Validar límite máximo de préstamos.
-- **Precondiciones:** El estudiante está activo y ya tiene tres préstamos activos.
-- **Datos de entrada:** Préstamos actuales = 3, nuevo préstamo = 1.
-- **Pasos:**
-  1. Seleccionar al estudiante.
-  2. Solicitar un nuevo préstamo.
-  3. Verificar la respuesta del sistema.
-- **Resultado esperado:** El sistema rechaza la solicitud porque el estudiante alcanzó el máximo de tres préstamos activos.
-- **Técnica aplicada:** Valores límite (superación del límite) y camino triste.
-
-### CP-010. Registrar préstamo con una unidad disponible
-
-- **Funcionalidad:** Validar disponibilidad de inventario.
-- **Precondiciones:** El libro tiene exactamente una unidad disponible y el estudiante cumple las condiciones del préstamo.
-- **Datos de entrada:** Stock disponible = 1.
-- **Pasos:**
-  1. Seleccionar el libro.
-  2. Solicitar el préstamo.
-  3. Consultar el inventario.
-- **Resultado esperado:** El préstamo se aprueba y el inventario queda con cero unidades disponibles.
-- **Técnica aplicada:** Valores límite (mínimo disponible).
-
-### CP-011. Intentar prestar un libro sin existencias
-
-- **Funcionalidad:** Validar disponibilidad de materiales.
-- **Precondiciones:** El libro está registrado, pero no tiene unidades disponibles.
-- **Datos de entrada:** Stock disponible = 0.
-- **Pasos:**
-  1. Seleccionar el libro.
+  1. Seleccionar el material no disponible.
   2. Solicitar el préstamo.
   3. Verificar la respuesta.
-- **Resultado esperado:** El sistema rechaza el préstamo y no modifica el inventario.
-- **Técnica aplicada:** Valores límite (cero unidades) y camino triste.
-
-### CP-012. Devolver un libro en la fecha establecida
-
-- **Funcionalidad:** Calcular multa por devolución.
-- **Precondiciones:** Existe un préstamo activo cuya fecha límite es el 20/11/2026.
-- **Datos de entrada:** Fecha límite = 20/11/2026, fecha de devolución = 20/11/2026.
-- **Pasos:**
-  1. Consultar el préstamo.
-  2. Registrar la devolución.
-  3. Verificar el cálculo de la multa.
-- **Resultado esperado:** El sistema registra la devolución sin generar una multa por retraso.
-- **Técnica aplicada:** Valores límite (cero días de retraso).
-
-### CP-013. Devolver un libro con un día de retraso
-
-- **Funcionalidad:** Calcular multa por devolución tardía.
-- **Precondiciones:** Existe un préstamo cuya fecha límite es el 20/11/2026.
-- **Datos de entrada:** Fecha límite = 20/11/2026, fecha de devolución = 21/11/2026.
-- **Pasos:**
-  1. Consultar el préstamo.
-  2. Registrar la devolución.
-  3. Calcular los días de retraso.
-  4. Verificar la multa generada.
-- **Resultado esperado:** El sistema identifica un día de retraso y calcula la multa correspondiente según la tarifa diaria configurada.
-- **Técnica aplicada:** Valores límite (primer día de retraso).
-
-### CP-014. Solicitar préstamo con estudiante inactivo
-
-- **Funcionalidad:** Validar estado del usuario.
-- **Precondiciones:** Existe un usuario registrado, pero su estado es inactivo.
-- **Datos de entrada:** Usuario = "Andrés Gómez", estado = INACTIVO, material disponible = 1.
-- **Pasos:**
-  1. Seleccionar al usuario.
-  2. Seleccionar un libro disponible.
-  3. Solicitar el préstamo.
-- **Resultado esperado:** El sistema rechaza la solicitud porque el estudiante no está activo.
+- **Resultado esperado:** El sistema rechaza el préstamo mediante una excepción y no guarda el registro.
 - **Técnica aplicada:** Partición de equivalencia (clase inválida) y camino triste.
 
-### CP-015. Intentar registrar una devolución sin autorización
+### CP-010. Registrar préstamo sin material
 
-- **Funcionalidad:** Validar permisos de devolución.
-- **Precondiciones:** Existe un préstamo activo y el usuario no tiene permisos de bibliotecario.
-- **Datos de entrada:** Usuario sin autorización, operación = registrar devolución administrativa.
+- **Funcionalidad:** Validar material obligatorio.
+- **Precondiciones:** El servicio de préstamos está disponible.
+- **Datos de entrada:** Material = null.
 - **Pasos:**
-  1. Ingresar con un usuario sin permisos administrativos.
-  2. Intentar registrar la devolución.
-  3. Consultar la respuesta de la API.
-- **Resultado esperado:** El sistema rechaza la operación y devuelve una respuesta de acceso no autorizado o prohibido, según la configuración de seguridad.
-- **Técnica aplicada:** Partición de equivalencia (clase no autorizada) y camino triste.
+  1. Intentar registrar un préstamo sin seleccionar un material.
+  2. Ejecutar el método de registro.
+  3. Verificar la respuesta.
+- **Resultado esperado:** El sistema rechaza la operación mediante una excepción.
+- **Técnica aplicada:** Partición de equivalencia (clase inválida) y camino triste.
+
+### CP-011. Registrar préstamo con fecha de devolución nula
+
+- **Funcionalidad:** Validar fechas del préstamo.
+- **Precondiciones:** El material existe y está disponible.
+- **Datos de entrada:** Fecha préstamo = 21/11/2026, fecha devolución = null.
+- **Pasos:**
+  1. Seleccionar un material disponible.
+  2. Ingresar la fecha de préstamo.
+  3. Dejar vacía la fecha de devolución.
+  4. Ejecutar el registro.
+- **Resultado esperado:** El sistema rechaza la operación porque las fechas son obligatorias.
+- **Técnica aplicada:** Partición de equivalencia (clase inválida).
+
+### CP-012. Registrar préstamo con fecha de devolución anterior
+
+- **Funcionalidad:** Validar orden de las fechas.
+- **Precondiciones:** El material existe y está disponible.
+- **Datos de entrada:** Fecha préstamo = 21/11/2026, fecha devolución = 20/11/2026.
+- **Pasos:**
+  1. Seleccionar un material disponible.
+  2. Ingresar las fechas.
+  3. Ejecutar el registro.
+  4. Verificar la respuesta.
+- **Resultado esperado:** El sistema rechaza el préstamo porque la fecha de devolución es anterior a la fecha del préstamo.
+- **Técnica aplicada:** Valores límite (fecha anterior) y camino triste.
+
+### CP-013. Devolver material en la fecha establecida
+
+- **Funcionalidad:** Calcular multa.
+- **Precondiciones:** Existe un préstamo con fecha límite de devolución 20/11/2026.
+- **Datos de entrada:** Fecha límite = 20/11/2026, fecha de entrega real = 20/11/2026.
+- **Pasos:**
+  1. Consultar el préstamo.
+  2. Ingresar la fecha de entrega real.
+  3. Ejecutar el cálculo de la multa.
+  4. Verificar el resultado.
+- **Resultado esperado:** El sistema calcula una multa de $0 porque no existen días de retraso.
+- **Técnica aplicada:** Valores límite (cero días de retraso).
+
+### CP-014. Devolver material con un día de retraso
+
+- **Funcionalidad:** Calcular multa por devolución tardía.
+- **Precondiciones:** Existe un préstamo cuya fecha límite es 20/11/2026.
+- **Datos de entrada:** Fecha límite = 20/11/2026, fecha de entrega real = 21/11/2026.
+- **Pasos:**
+  1. Consultar el préstamo.
+  2. Ingresar la fecha de entrega real.
+  3. Ejecutar el cálculo de la multa.
+  4. Verificar el resultado.
+- **Resultado esperado:** El sistema identifica un día de retraso y calcula una multa de $2.000.
+- **Técnica aplicada:** Valores límite (primer día de retraso).
+
+### CP-015. Calcular multa sin fecha de entrega real
+
+- **Funcionalidad:** Validar datos para el cálculo de multas.
+- **Precondiciones:** Existe un préstamo registrado.
+- **Datos de entrada:** Préstamo válido, fecha de entrega real = null.
+- **Pasos:**
+  1. Consultar el préstamo.
+  2. Intentar calcular la multa sin ingresar la fecha de entrega.
+  3. Verificar la respuesta.
+- **Resultado esperado:** El sistema rechaza la operación mediante una excepción porque los datos son obligatorios.
+- **Técnica aplicada:** Partición de equivalencia (clase inválida) y camino triste.
 
 ## 3. Resumen de técnicas aplicadas
 
 | Técnica | Casos identificados | Cantidad |
 |---|---|---:|
-| Partición de equivalencia | CP-001, CP-002, CP-003, CP-004, CP-005, CP-006, CP-007, CP-014, CP-015 | 9 |
-| Valores límite | CP-008, CP-009, CP-010, CP-011, CP-012, CP-013 | 6 |
-| Caminos tristes | CP-004, CP-009, CP-011, CP-014, CP-015 | 5 |
+| Partición de equivalencia | CP-001, CP-002, CP-003, CP-004, CP-006, CP-007, CP-008, CP-009, CP-010, CP-011, CP-015 | 11 |
+| Valores límite | CP-005, CP-012, CP-013, CP-014 | 4 |
+| Caminos tristes | CP-002, CP-003, CP-007, CP-009, CP-010, CP-012, CP-015 | 7 |
 
 ## 4. Conclusión
 
-Los casos de prueba diseñados permiten evaluar diferentes situaciones que pueden presentarse durante el funcionamiento de BiblioUni. Se incluyen operaciones exitosas, validaciones de límites y situaciones en las que el sistema debe rechazar determinadas solicitudes.
+Los casos de prueba diseñados permiten evaluar las principales funcionalidades implementadas en BiblioUni. Se incluyen escenarios exitosos, validaciones de datos, consultas de materiales, registro de préstamos y cálculo de multas.
 
-La aplicación de estas técnicas ayuda a identificar posibles errores y comprobar que las reglas de negocio se cumplan correctamente, contribuyendo a mejorar la calidad y confiabilidad del sistema.
+La aplicación de las técnicas de partición de equivalencia, valores límite y caminos tristes ayuda a identificar posibles errores y comprobar que el sistema responda correctamente ante diferentes situaciones.
+
+Estos casos sirven como guía para organizar las pruebas y verificar el comportamiento del proyecto durante su desarrollo.
