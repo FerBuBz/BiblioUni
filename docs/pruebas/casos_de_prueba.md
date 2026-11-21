@@ -198,7 +198,7 @@ Las pruebas se enfocan principalmente en la creación y consulta de materiales, 
 | Técnica | Casos identificados | Cantidad |
 |---|---|---:|
 | Partición de equivalencia | CP-001, CP-002, CP-003, CP-004, CP-006, CP-007, CP-008, CP-009, CP-010, CP-011, CP-015 | 11 |
-| Valores límite | CP-005, CP-012, CP-013, CP-014 | 4 |
+| Valores límite | CP-004, CP-005, CP-012, CP-013, CP-014 | 5 |
 | Caminos tristes | CP-002, CP-003, CP-007, CP-009, CP-010, CP-012, CP-015 | 7 |
 
 ## 4. Conclusión
