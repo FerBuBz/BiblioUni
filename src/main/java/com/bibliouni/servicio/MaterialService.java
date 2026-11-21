@@ -15,6 +15,9 @@ public class MaterialService {
     }
 
     public Material crearMaterial(Long id, String nombre, boolean disponible) {
+        if (id == null) {
+             throw new IllegalArgumentException("El ID del material es obligatorio");
+}
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new IllegalArgumentException(
                 "El nombre del material es obligatorio"
