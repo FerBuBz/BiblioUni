@@ -1,7 +1,7 @@
-
 package com.bibliouni.servicio;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import com.bibliouni.modelo.Material;
 import com.bibliouni.modelo.Prestamo;
@@ -42,9 +42,9 @@ public class PrestamoService {
         }
 
         
-
-        long diasRetraso = java.time.temporal.ChronoUnit.DAYS.between(
-                prestamo.getFechaDevolucion(), fechaEntregaReal);
+        
+       long diasRetraso = ChronoUnit.DAYS.between(
+        prestamo.getFechaDevolucion(), fechaEntregaReal);
 
         if (diasRetraso <= 0) {
             return 0.0;
