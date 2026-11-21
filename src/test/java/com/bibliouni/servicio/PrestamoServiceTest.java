@@ -88,4 +88,22 @@ class PrestamoServiceTest {
         assertEquals(6000.0, multa);
         assertEquals(6000.0, prestamo.getMulta());
     }
+
+
+@Test
+void debeRechazarFechaDeDevolucionAnteriorAlPrestamo() {
+    // Arrange
+    Material material = new Material(4L, "Libro de prueba", true);
+    LocalDate fechaPrestamo = LocalDate.of(2026, 11, 21);
+    LocalDate fechaDevolucion = LocalDate.of(2026, 11, 15);
+
+    // Act y Assert
+    assertThrows(IllegalArgumentException.class, () ->
+            prestamoService.registrarPrestamo(
+                    4L, material, fechaPrestamo, fechaDevolucion));
+}
+
+
+
+
 }
